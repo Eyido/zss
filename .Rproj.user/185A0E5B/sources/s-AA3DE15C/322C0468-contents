@@ -1,0 +1,42 @@
+---
+title: "Week6 Discussion"
+author: "Jessica Pu"
+date: 2021-11-01T21:13:14-05:00
+categories: ["R"]
+tags: ["US", "Income", "region"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# Data Visualisation 
+```{r include=FALSE}
+library(dplyr)
+library(tidyverse)
+library(plotly)
+library(highcharter)
+library(DT)
+library(leaflet)
+
+US_states77<-data.frame(state.x77) %>%
+  rownames_to_column(., var = "State") %>%
+  tibble(Region = state.region,
+         Division = state.division,
+         Longitude=state.center$x,
+         Latitude=state.center$y)
+```
+
+This histogram illustrates the distribution of per capita income in USA.
+```{r echo=FALSE}
+US_states77 %>%
+  tibble(State.abb = state.abb)%>%
+  plot_geo() %>%
+  add_trace(locationmode = "USA-states",
+            locations = ~State.abb,
+            z = ~Income,
+            reversescale = T)%>% #inverse the colors, darker for highest value
+   layout(geo = list(showcountries = TRUE, scope = 'usa'))
+```
+
+
